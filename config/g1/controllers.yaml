@@ -1,0 +1,78 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 500  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    standby_controller:
+      type: legged_controllers/StandbyController
+    walking_controller:
+      type: legged_rl_controllers/OnnxController
+
+
+standby_controller:
+  ros__parameters:
+    default_position: [ -0.312, 0.0, 0.0, 0.669, -0.363, 0.0,
+                        -0.312, 0.0, 0.0, 0.669, -0.363, 0.0,
+                        0.0, 0.0, 0.073,
+                        0.2, 0.2, 0.0, 0.6, 0.0, 0.0, 0.0,
+                        0.2, -0.2, 0.0, 0.6, 0.0, 0.0, 0.0 ]
+    kp: [ 350.0, 200.0, 200.0, 300.0, 200.0, 150.0,
+          350.0, 200.0, 200.0, 300.0, 200.0, 150.0,
+          200.0, 200.0, 200.0,
+          40.0, 40.0, 40.0, 40.0, 40.0, 40.0, 40.0,
+          40.0, 40.0, 40.0, 40.0, 40.0, 40.0, 40.0 ]
+    kd: [ 5.0, 5.0, 5.0, 10.0, 5.0, 5.0,
+          5.0, 5.0, 5.0, 10.0, 5.0, 5.0,
+          5.0, 5.0, 5.0,
+          3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0,
+          3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0 ]
+    model:
+      base_name: "pelvis"
+      six_dof_contact_names: [ "LL_FOOT", "LR_FOOT" ]
+
+walking_controller:
+  ros__parameters:
+    default_position: [ -0.312, 0.0, 0.0, 0.669, -0.363, 0.0,
+                        -0.312, 0.0, 0.0, 0.669, -0.363, 0.0,
+                        0.0, 0.0, 0.073,
+                        0.2, 0.2, 0.0, 0.6, 0.0, 0.0, 0.0,
+                        0.2, -0.2, 0.0, 0.6, 0.0, 0.0, 0.0 ]
+    kp: [ 75.0, 75.0, 75.0, 75.0, 20.0, 2.0,
+          75.0, 75.0, 75.0, 75.0, 20.0, 2.0,
+          75.0, 75.0, 75.0,
+          75.0, 75.0, 75.0, 75.0, 2.0, 2.0, 2.0,
+          75.0, 75.0, 75.0, 75.0, 2.0, 2.0, 2.0 ]
+    kd: [ 2.0, 2.0, 2.0, 2.0, 1.0, 0.2,
+          2.0, 2.0, 2.0, 2.0, 1.0, 0.2,
+          2.0, 2.0, 2.0,
+          2.0, 2.0, 2.0, 2.0, 0.2, 0.2, 0.2,
+          2.0, 2.0, 2.0, 2.0, 0.2, 0.2, 0.2 ]
+    model:
+      base_name: "pelvis"
+      six_dof_contact_names: [ "LL_FOOT", "LR_FOOT" ]
+    policy:
+      joint_names:
+        [ left_hip_pitch_joint, left_hip_roll_joint, left_hip_yaw_joint,
+          left_knee_joint, left_ankle_pitch_joint, left_ankle_roll_joint,
+          right_hip_pitch_joint, right_hip_roll_joint, right_hip_yaw_joint,
+          right_knee_joint, right_ankle_pitch_joint, right_ankle_roll_joint,
+          waist_yaw_joint, waist_roll_joint, waist_pitch_joint,
+          left_shoulder_pitch_joint, left_shoulder_roll_joint, left_shoulder_yaw_joint,
+          left_elbow_joint, left_wrist_roll_joint, left_wrist_pitch_joint, left_wrist_yaw_joint,
+          right_shoulder_pitch_joint, right_shoulder_roll_joint, right_shoulder_yaw_joint,
+          right_elbow_joint, right_wrist_roll_joint, right_wrist_pitch_joint, right_wrist_yaw_joint ]
+
+      path: "config/g1/policy.onnx"
+      observations:
+        - "base_lin_vel"
+        - "base_ang_vel"
+        - "projected_gravity"
+        - "command"
+        - "joint_positions"
+        - "joint_velocities"
+        - "last_action"
+        - "phase"
+      commands:
+        - "twist"
+      action_scale: 0.5

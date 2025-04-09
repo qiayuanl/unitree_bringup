@@ -1,0 +1,97 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 500  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    standby_controller:
+      type: legged_controllers/StandbyController
+    getup_controller:
+      type: legged_rl_controllers/OnnxController
+    walking_controller:
+      type: legged_rl_controllers/OnnxController
+    handstand_controller:
+      type: legged_rl_controllers/OnnxController
+    backflip_controller:
+      type: legged_rl_controllers/OnnxController
+
+standby_controller:
+  ros__parameters:
+    default_position: [ -0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, 0.1, 0.9, -1.8 ]
+    kp: [ 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0 ]
+    kd: [ 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0 ]
+    model:
+      base_name: "base"
+      three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
+
+getup_controller:
+  ros__parameters:
+    default_position: [ -0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, 0.1, 0.9, -1.8 ]
+    kp: [ 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0 ]
+    kd: [ 0.5, 0.5, 0.5,  0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 ]
+    model:
+      base_name: "base"
+      three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
+    policy:
+      path: "config/go1/go1_getup.onnx"
+      joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
+                     "RH_HAA", "RH_HFE",  "RH_KFE", "LH_HAA", "LH_HFE", "LH_KFE", ]
+      observations:
+        - "base_ang_vel"
+        - "projected_gravity"
+        - "joint_positions"
+        - "joint_velocities"
+        - "last_action"
+      action_scale: 0.5
+      action_type: "position_delta"
+
+walking_controller:
+  ros__parameters:
+    default_position: [ -0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, 0.1, 0.9, -1.8 ]
+    kp: [ 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0 ]
+    kd: [ 0.5, 0.5, 0.5,  0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 ]
+    model:
+      base_name: "base"
+      three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
+
+    estimation:
+      contact:
+        radius: 0.02
+
+    policy:
+      path: "config/go1/go1_joystick.onnx"
+      joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
+                     "RH_HAA", "RH_HFE",  "RH_KFE", "LH_HAA", "LH_HFE", "LH_KFE", ]
+      observations:
+        - "base_lin_vel"
+        - "base_ang_vel"
+        - "projected_gravity"
+        - "joint_positions"
+        - "joint_velocities"
+        - "last_action"
+        - "command"
+      commands:
+        - "twist"
+      action_scale: 0.45
+
+handstand_controller:
+  ros__parameters:
+    default_position: [ -0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, 0.1, 0.9, -1.8 ]
+    kp: [ 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0 ]
+    kd: [ 0.5, 0.5, 0.5,  0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 ]
+    model:
+      base_name: "base"
+      three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
+    policy:
+      path: "config/go1/go1_handstand.onnx"
+      joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
+                     "RH_HAA", "RH_HFE",  "RH_KFE", "LH_HAA", "LH_HFE", "LH_KFE", ]
+      observations:
+        - "base_lin_vel"
+        - "base_ang_vel"
+        - "projected_gravity"
+        - "joint_positions"
+        - "joint_velocities"
+        - "last_action"
+      action_scale: 0.3
+      action_type: "position_relative"

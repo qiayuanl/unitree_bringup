@@ -1,0 +1,70 @@
+joy_teleop:
+  ros__parameters:
+
+    walk:
+      type: topic
+      interface_type: geometry_msgs/msg/TwistStamped
+      topic_name: cmd_vel
+      deadman_buttons: [ 4 ]
+      axis_mappings:
+        twist-angular-z:
+          axis: 0
+          scale: 6.28
+          offset: 0.0
+        twist-linear-x:
+          axis: 1
+          scale: 1.5
+          offset: 0.0
+        twist-linear-y:
+          axis: 3
+          scale: 0.8
+          offset: 0.0
+
+    getup_controller:
+      type: service
+      interface_type: controller_manager_msgs/srv/SwitchController
+      service_name: /controller_manager/switch_controller
+      buttons: [ 4, 0 ]
+      service_request: { activate_controllers: [ getup_controller ],
+                         deactivate_controllers: [ standby_controller, walking_controller, handstand_controller ],
+                         strictness: 1,
+                         activate_asap: 1 }
+
+    walking_controller:
+      type: service
+      interface_type: controller_manager_msgs/srv/SwitchController
+      service_name: /controller_manager/switch_controller
+      buttons: [ 5, 0 ]
+      service_request: { activate_controllers: [ walking_controller ],
+                         deactivate_controllers: [ standby_controller, getup_controller, handstand_controller ],
+                         strictness: 1,
+                         activate_asap: 1 }
+
+    handstand_controller:
+      type: service
+      interface_type: controller_manager_msgs/srv/SwitchController
+      service_name: /controller_manager/switch_controller
+      buttons: [ 5, 2 ]
+      service_request: { activate_controllers: [ handstand_controller ],
+                         deactivate_controllers: [ standby_controller, getup_controller, walking_controller ],
+                         strictness: 1,
+                         activate_asap: 1 }
+
+    backflip_controller:
+      type: service
+      interface_type: controller_manager_msgs/srv/SwitchController
+      service_name: /controller_manager/switch_controller
+      buttons: [ 4, 3 ]
+      service_request: { activate_controllers: [ backflip_controller ],
+                         deactivate_controllers: [ standby_controller, walking_controller, getup_controller ],
+                         strictness: 1,
+                         activate_asap: 1 }
+
+    stop_controller:
+      type: service
+      interface_type: controller_manager_msgs/srv/SwitchController
+      service_name: /controller_manager/switch_controller
+      buttons: [ 1 ]
+      service_request: { deactivate_controllers: [ standby_controller, getup_controller, walking_controller, handstand_controller, backflip_controller ],
+                         strictness: 1,
+                         activate_asap: 1 }
