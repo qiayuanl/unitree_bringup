@@ -23,6 +23,11 @@ standby_controller:
     model:
       base_name: "base"
       three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
+    estimation:
+      contact:
+        radius: 0.02
+        force_threshold: 20.0
+        force_scale: 0.5
 
 getup_controller:
   ros__parameters:
@@ -32,6 +37,11 @@ getup_controller:
     model:
       base_name: "base"
       three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
+    estimation:
+      contact:
+        radius: 0.02
+        force_threshold: 20.0
+        force_scale: 0.5
     policy:
       path: "config/go1/go1_getup.onnx"
       joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
@@ -53,11 +63,11 @@ walking_controller:
     model:
       base_name: "base"
       three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
-
     estimation:
       contact:
         radius: 0.02
-
+        force_threshold: 20.0
+        force_scale: 0.5
     policy:
       path: "config/go1/go1_joystick.onnx"
       joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
@@ -82,6 +92,11 @@ handstand_controller:
     model:
       base_name: "base"
       three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
+    estimation:
+      contact:
+        radius: 0.02
+        force_threshold: 20.0
+        force_scale: 0.5
     policy:
       path: "config/go1/go1_handstand.onnx"
       joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
