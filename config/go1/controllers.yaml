@@ -4,6 +4,8 @@ controller_manager:
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
+    state_estimator:
+      type: legged_controllers/StateEstimator
     standby_controller:
       type: legged_controllers/StandbyController
     getup_controller:
@@ -12,40 +14,35 @@ controller_manager:
       type: legged_rl_controllers/OnnxController
     handstand_controller:
       type: legged_rl_controllers/OnnxController
-    backflip_controller:
-      type: legged_rl_controllers/OnnxController
+
+state_estimator:
+  ros__parameters:
+    model:
+      base_name: "base"
+      three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
+    estimation:
+      contact:
+        radius: 0.02
+        force_threshold: 20.0
+        force_scale: 0.5
 
 standby_controller:
   ros__parameters:
-    default_position: [ -0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, 0.1, 0.9, -1.8 ]
+    joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
+                   "RH_HAA", "RH_HFE",  "RH_KFE", "LH_HAA", "LH_HFE", "LH_KFE", ]
+    default_position: [ 0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, -0.1, 0.9, -1.8 ]
     kp: [ 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0, 80.0 ]
     kd: [ 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0 ]
-    model:
-      base_name: "base"
-      three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
-    estimation:
-      contact:
-        radius: 0.02
-        force_threshold: 20.0
-        force_scale: 0.5
 
 getup_controller:
   ros__parameters:
-    default_position: [ -0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, 0.1, 0.9, -1.8 ]
+    joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
+                   "RH_HAA", "RH_HFE",  "RH_KFE", "LH_HAA", "LH_HFE", "LH_KFE", ]
+    default_position: [ 0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, -0.1, 0.9, -1.8 ]
     kp: [ 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0 ]
     kd: [ 0.5, 0.5, 0.5,  0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 ]
-    model:
-      base_name: "base"
-      three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
-    estimation:
-      contact:
-        radius: 0.02
-        force_threshold: 20.0
-        force_scale: 0.5
     policy:
       path: "config/go1/go1_getup.onnx"
-      joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
-                     "RH_HAA", "RH_HFE",  "RH_KFE", "LH_HAA", "LH_HFE", "LH_KFE", ]
       observations:
         - "base_ang_vel"
         - "projected_gravity"
@@ -57,21 +54,14 @@ getup_controller:
 
 walking_controller:
   ros__parameters:
-    default_position: [ -0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, 0.1, 0.9, -1.8 ]
+    joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
+                   "RH_HAA", "RH_HFE",  "RH_KFE", "LH_HAA", "LH_HFE", "LH_KFE", ]
+    default_position: [ 0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, -0.1, 0.9, -1.8 ]
     kp: [ 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0 ]
     kd: [ 0.5, 0.5, 0.5,  0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 ]
-    model:
-      base_name: "base"
-      three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
-    estimation:
-      contact:
-        radius: 0.02
-        force_threshold: 20.0
-        force_scale: 0.5
+
     policy:
       path: "config/go1/go1_joystick.onnx"
-      joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
-                     "RH_HAA", "RH_HFE",  "RH_KFE", "LH_HAA", "LH_HFE", "LH_KFE", ]
       observations:
         - "base_lin_vel"
         - "base_ang_vel"
@@ -86,21 +76,14 @@ walking_controller:
 
 handstand_controller:
   ros__parameters:
-    default_position: [ -0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, 0.1, 0.9, -1.8 ]
+    joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
+                   "RH_HAA", "RH_HFE",  "RH_KFE", "LH_HAA", "LH_HFE", "LH_KFE", ]
+    default_position: [ 0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, -0.1, 0.9, -1.8 ]
     kp: [ 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0, 35.0 ]
     kd: [ 0.5, 0.5, 0.5,  0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 ]
-    model:
-      base_name: "base"
-      three_dof_contact_names: [ "LF_FOOT", "LH_FOOT" ,"RF_FOOT", "RH_FOOT" ]
-    estimation:
-      contact:
-        radius: 0.02
-        force_threshold: 20.0
-        force_scale: 0.5
+
     policy:
       path: "config/go1/go1_handstand.onnx"
-      joint_names: [ "RF_HAA", "RF_HFE", "RF_KFE", "LF_HAA", "LF_HFE", "LF_KFE",
-                     "RH_HAA", "RH_HFE",  "RH_KFE", "LH_HAA", "LH_HFE", "LH_KFE", ]
       observations:
         - "base_lin_vel"
         - "base_ang_vel"

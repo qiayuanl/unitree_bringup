@@ -74,13 +74,13 @@ def setup_controllers(context, control_node):
 
     active_list = [
         "joint_state_broadcaster",
+        "state_estimator",
         "standby_controller",
     ]
     inactive_list = [
         "walking_controller",
-        "getup_controller",
-        "handstand_controller",
-        "backflip_controller",
+        # "getup_controller",
+        # "handstand_controller",
     ]
     active_spawner = control_spawner(active_list)
     inactive_spawner = control_spawner(inactive_list, inactive=True)
@@ -123,7 +123,10 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
-        parameters=[robot_description, {'publish_frequency': 100.0}],
+        parameters=[robot_description, {
+            'publish_frequency': 1000.0,
+            'use_sim_time': True
+        }],
     )
 
     control_node = Node(
