@@ -72,6 +72,7 @@ def setup_controllers(context):
 
     active_list = [
         "joint_state_broadcaster",
+        "state_estimator",
         "standby_controller"
     ]
 
@@ -114,7 +115,8 @@ def generate_launch_description():
         executable='robot_state_publisher',
         output='screen',
         parameters=[robot_description, {
-            'publish_frequency': 100.0
+            'publish_frequency': 1000.0,
+            'use_sim_time': True
         }],
     )
 

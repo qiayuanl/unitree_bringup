@@ -9,7 +9,7 @@ joy_teleop:
       axis_mappings:
         twist-angular-z:
           axis: 0
-          scale: 1.
+          scale: 1.5
           offset: 0.0
         twist-linear-x:
           axis: 1
@@ -17,7 +17,7 @@ joy_teleop:
           offset: 0.0
         twist-linear-y:
           axis: 3
-          scale: 1.0
+          scale: 0.8
           offset: 0.0
 
     standby_controller:
@@ -49,14 +49,14 @@ joy_teleop:
                          strictness: 1,
                          activate_asap: 1 }
 
-      stop_controller_left_stick:
-        type: service
-        interface_type: controller_manager_msgs/srv/SwitchController
-        service_name: /controller_manager/switch_controller
-        buttons: [ 9 ]
-        service_request: { deactivate_controllers: [ standby_controller, getup_controller, walking_controller, handstand_controller, backflip_controller ],
-                           strictness: 1,
-                           activate_asap: 1 }
+    stop_controller_left_stick:
+      type: service
+      interface_type: controller_manager_msgs/srv/SwitchController
+      service_name: /controller_manager/switch_controller
+      buttons: [ 9 ]
+      service_request: { deactivate_controllers: [ standby_controller, getup_controller, walking_controller, handstand_controller, backflip_controller ],
+                         strictness: 1,
+                         activate_asap: 1 }
 
     stop_controller_select:
       type: service
