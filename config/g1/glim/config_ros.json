@@ -40,19 +40,15 @@
     "points_time_offset": 0.0,
     "acc_scale": 9.81,
     // TF config
-    "imu_frame_id": "lio_imu",
-    "lidar_frame_id": "lio_lidar",
-    "base_frame_id": "",
-    "odom_frame_id": "odom",
+    "imu_frame_id": "imu_lio",
+    "odom_frame_id": "odom_lio",
     "map_frame_id": "map",
-    "publish_imu2lidar": true,
+    "publish_imu2lidar": false,
     "tf_time_offset": 1e-6,
     // Extension modules
     "extension_modules": [
       "libmemory_monitor.so",
-      // "libstandard_viewer.so",
       "librviz_viewer.so"
-      // "libimu_validator.so"
     ],
     // Topics
     "imu_topic": "/livox/imu",
