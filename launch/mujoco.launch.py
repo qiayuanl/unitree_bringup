@@ -71,7 +71,6 @@ def setup_controllers(context):
     )
 
     active_list = [
-        "joint_state_broadcaster",
         "state_estimator",
         "standby_controller"
     ]

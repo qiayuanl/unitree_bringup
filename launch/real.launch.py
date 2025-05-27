@@ -73,7 +73,6 @@ def setup_controllers(context, control_node):
     )
 
     active_list = [
-        "joint_state_broadcaster",
         "state_estimator",
         "standby_controller",
     ]
