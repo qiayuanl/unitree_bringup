@@ -92,7 +92,9 @@ def setup_controllers(context):
 def generate_launch_description():
     robot_type = LaunchConfiguration('robot_type')
 
-    urdf_name = PythonExpression(["'g1' if '", robot_type, "' == 'g1' else 'sdk1'"])
+    urdf_name = PythonExpression([
+        "'g1' if '", robot_type, "' == 'g1' else ('go2' if '", robot_type, "' == 'go2' else 'sdk1')"
+    ])
 
     robot_description_command = Command([
         PathJoinSubstitution([FindExecutable(name='xacro')]),
@@ -114,7 +116,7 @@ def generate_launch_description():
         executable='robot_state_publisher',
         output='screen',
         parameters=[robot_description, {
-            'publish_frequency': 1000.0,
+            'publish_frequency': 500.0,
             'use_sim_time': True
         }],
     )
