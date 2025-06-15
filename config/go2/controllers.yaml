@@ -42,7 +42,7 @@ walking_controller:
     kd: [ 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5 ]
 
     policy:
-      path: "config/go2/go2_policy.onnx"
+      path: "config/go2/policy.onnx"
       observations:
         - "base_lin_vel"
         - "base_ang_vel"
