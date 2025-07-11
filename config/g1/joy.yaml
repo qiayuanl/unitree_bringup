@@ -26,7 +26,7 @@ joy_teleop:
       service_name: /controller_manager/switch_controller
       buttons: [ 4, 0 ]
       service_request: { activate_controllers: [ standby_controller ],
-                         deactivate_controllers: [ walking_controller, handstand_controller ],
+                         deactivate_controllers: [ walking_controller, walking_controller1 ],
                          strictness: 1,
                          activate_asap: 1 }
 
@@ -36,7 +36,17 @@ joy_teleop:
       service_name: /controller_manager/switch_controller
       buttons: [ 5, 0 ]
       service_request: { activate_controllers: [ walking_controller ],
-                         deactivate_controllers: [ standby_controller, getup_controller, handstand_controller ],
+                         deactivate_controllers: [ standby_controller, walking_controller1 ],
+                         strictness: 1,
+                         activate_asap: 1 }
+
+    walking_controller1:
+      type: service
+      interface_type: controller_manager_msgs/srv/SwitchController
+      service_name: /controller_manager/switch_controller
+      buttons: [ 5, 2 ]
+      service_request: { activate_controllers: [ walking_controller1 ],
+                         deactivate_controllers: [ standby_controller, walking_controller ],
                          strictness: 1,
                          activate_asap: 1 }
 
@@ -45,7 +55,7 @@ joy_teleop:
       interface_type: controller_manager_msgs/srv/SwitchController
       service_name: /controller_manager/switch_controller
       buttons: [ 1 ]
-      service_request: { deactivate_controllers: [ standby_controller, getup_controller, walking_controller, handstand_controller, backflip_controller ],
+      service_request: { deactivate_controllers: [ standby_controller, walking_controller, walking_controller1 ],
                          strictness: 1,
                          activate_asap: 1 }
 
@@ -54,7 +64,7 @@ joy_teleop:
       interface_type: controller_manager_msgs/srv/SwitchController
       service_name: /controller_manager/switch_controller
       buttons: [ 9 ]
-      service_request: { deactivate_controllers: [ standby_controller, getup_controller, walking_controller, handstand_controller, backflip_controller ],
+      service_request: { deactivate_controllers: [ standby_controller, walking_controller, walking_controller1 ],
                          strictness: 1,
                          activate_asap: 1 }
 
@@ -63,6 +73,6 @@ joy_teleop:
       interface_type: controller_manager_msgs/srv/SwitchController
       service_name: /controller_manager/switch_controller
       buttons: [ 6 ]
-      service_request: { deactivate_controllers: [ standby_controller, getup_controller, walking_controller, handstand_controller, backflip_controller ],
+      service_request: { deactivate_controllers: [ standby_controller, walking_controller, walking_controller1 ],
                          strictness: 1,
                          activate_asap: 1 }
