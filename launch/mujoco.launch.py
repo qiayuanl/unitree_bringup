@@ -40,8 +40,6 @@ def fill_policy_path(config_path, package_name):
 def control_spawner(names, inactive=False):
     # Start building the arguments list with the controller names
     args = list(names)
-    # Add the parameter file from the LaunchConfiguration
-    args += ['--param-file', LaunchConfiguration('controllers_yaml')]
 
     # If you want them to start inactive (rather than active), pass `--inactive`
     if inactive:
@@ -128,6 +126,7 @@ def generate_launch_description():
             {"model_package": "unitree_description",
              "model_file": PythonExpression(["'/mjcf/", robot_type, ".xml'"]),
              "physics_plugins": ["mujoco_ros2_control::MujocoRos2ControlPlugin"],
+             'use_sim_time': True,
              },
             robot_description,
             LaunchConfiguration('controllers_yaml'),
