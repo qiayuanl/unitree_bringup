@@ -35,17 +35,19 @@ standby_controller:
 getup_controller:
   ros__parameters:
     policy:
+      update_rate: 50
       path: "config/go1/go1_getup.onnx"
       action_type: "position_delta"
 
 walking_controller:
   ros__parameters:
+    update_rate: 50
     policy:
       path: "config/go1/go1_joystick.onnx"
 
 handstand_controller:
   ros__parameters:
-
+    update_rate: 50
     policy:
       path: "config/go1/go1_handstand.onnx"
       action_type: "position_relative"

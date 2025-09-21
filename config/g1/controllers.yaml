@@ -51,5 +51,6 @@ standby_controller:
 
 walking_controller:
   ros__parameters:
+    update_rate: 50
     policy:
       path: "config/g1/policy.onnx"
