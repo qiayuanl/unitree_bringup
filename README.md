@@ -8,7 +8,7 @@ Quick start a terminal
 docker run -it --rm \
 --privileged --network host \
 -v /dev:/dev -v /home/unitree/colcon_ws:/colcon_ws \
-qiayuanl/unitree:latest \
+qiayuanl/unitree:jazzy \
 zsh
 ```
 
@@ -60,4 +60,12 @@ docker run -it --name lio --restart always \
 -v /dev:/dev -v /home/unitree/colcon_ws:/colcon_ws \
 qiayuanl/unitree:latest \
 ros2 launch unitree_bringup lio.launch.py
+```
+
+```
+docker run -it --rm \
+--privileged --network host \
+-v /dev:/dev -v /home/unitree/colcon_ws:/colcon_ws \
+qiayuanl/unitree:jazzy \
+ros2 launch motion_tracking_controller real.launch.py robot_type:='g1' network_interface:="eth0" policy_path:="src/motion_tracking_controller/config/g1/spin_kick.onnx"
 ```
