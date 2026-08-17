@@ -14,6 +14,9 @@ from launch_ros.substitutions import FindPackageShare
 from legged_bringup.launch_utils import (
     get_controller_names, generate_temp_config, resolve_policy_paths, download_wandb_onnx, control_spawner
 )
+from unitree_description.joint_offsets import (
+    declare_joint_offsets_file, joint_offsets_xacro_arg
+)
 
 
 def setup_controllers(context):
@@ -76,7 +79,8 @@ def generate_launch_description():
         " ",
         "simulation:=", "false",
         " ",
-        "network_interface:=", network_interface
+        "network_interface:=", network_interface,
+        *joint_offsets_xacro_arg()
     ])
     robot_description = {"robot_description": robot_description_command}
 
@@ -108,6 +112,7 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('robot_type', default_value='g1'),
         DeclareLaunchArgument('network_interface', default_value=''),
+        declare_joint_offsets_file(),
         DeclareLaunchArgument(
             'policy_path',
             default_value='',
