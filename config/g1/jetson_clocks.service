@@ -1,0 +1,10 @@
+[Unit]
+Description=Maximum CPU, GPU and memory clocks for the control loop
+After=nvpmodel.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/jetson_clocks
+
+[Install]
+WantedBy=multi-user.target

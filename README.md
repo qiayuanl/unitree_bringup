@@ -16,6 +16,30 @@ sudo dockerd --validate --config-file /etc/docker/daemon.json && sudo systemctl 
 docker run --rm --privileged --cpu-rt-runtime=950000 qiayuanl/unitree chrt -f 50 true
 ```
 
+G1 GPU, once per robot on JetPack 5.1.1 (L4T R35.3.1; other versions need a new list): the container runtime mounts
+only the driver. `tensorrt.csv` adds TensorRT 8.5, cuDNN 8.6 and the CUDA 11.4 libraries they load, and `jetson_clocks`
+keeps the GPU from idling at 306 MHz between policy ticks. Install and check:
+
+```
+cd ~/colcon_ws/src/unitree_bringup/config/g1
+sudo cp tensorrt.csv /etc/nvidia-container-runtime/host-files-for-container.d/
+sudo cp jetson_clocks.service /etc/systemd/system/ && sudo systemctl enable --now jetson_clocks
+docker run --rm --runtime nvidia -e NVIDIA_VISIBLE_DEVICES=all qiayuanl/unitree \
+python3 -c "import ctypes; ctypes.CDLL('libnvonnxparser.so.8')"
+```
+
+With `--runtime nvidia -e NVIDIA_VISIBLE_DEVICES=all`, policies run on TensorRT (the launch log shows
+`Inference backend: legged_rl_tensorrt/TensorRtBackend`) and need an engine next to each ONNX; a launch without one
+fails and names this command. Build them once per policy, not while a policy runs (about 45 s of GPU load):
+
+```
+docker run --rm --runtime nvidia -e NVIDIA_VISIBLE_DEVICES=all -v /home/unitree/colcon_ws:/colcon_ws qiayuanl/unitree \
+ros2 run legged_rl_tensorrt build_engine /colcon_ws/policies/<name>_encoder.onnx /colcon_ws/policies/<name>_decoder.onnx
+```
+
+Without those flags policies run on the CPU. Use that for `wandb_path` downloads: they live in the container, so their
+engines would be lost with it.
+
 Quick start a terminal
 
 ```
@@ -81,6 +105,7 @@ G1 motion tracking
 ```
 docker run -it --rm \
 --privileged --cpu-rt-runtime=950000 --network host \
+--runtime nvidia -e NVIDIA_VISIBLE_DEVICES=all \
 -v /dev:/dev -v /home/unitree/colcon_ws:/colcon_ws \
 qiayuanl/unitree \
 ros2 launch motion_tracking_controller real.launch.py network_interface:='eth0' \
