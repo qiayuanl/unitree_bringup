@@ -76,10 +76,14 @@ qiayuanl/unitree \
 ros2 launch unitree_bringup lio.launch.py
 ```
 
+G1 motion tracking
+
 ```
 docker run -it --rm \
---privileged --network host \
+--privileged --cpu-rt-runtime=950000 --network host \
 -v /dev:/dev -v /home/unitree/colcon_ws:/colcon_ws \
 qiayuanl/unitree \
-ros2 launch motion_tracking_controller real.launch.py robot_type:='g1' network_interface:="eth0" policy_path:="src/motion_tracking_controller/config/g1/spin_kick.onnx"
+ros2 launch motion_tracking_controller real.launch.py network_interface:='eth0' \
+encoder_path:='/colcon_ws/policies/<name>_encoder.onnx' decoder_path:='/colcon_ws/policies/<name>_decoder.onnx' \
+motion_dir:='/colcon_ws/motions'
 ```
