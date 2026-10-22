@@ -2,6 +2,9 @@
 docker pull qiayuanl/unitree
 ```
 
+ROS 2 in the image uses domain 1: its discovery traffic on the robot's DDS domain 0 stalls `LowState_`. ROS 2 tools on a
+laptop need `export ROS_DOMAIN_ID=1`.
+
 Quick start a terminal
 
 ```
