@@ -25,7 +25,7 @@ def setup_controllers(context):
     wandb_path_value = LaunchConfiguration('wandb_path').perform(context)
 
     if not policy_path_value and wandb_path_value:
-        policy_path_value = download_wandb_onnx(wandb_path_value)
+        policy_path_value = download_wandb_onnx(wandb_path_value, ('.onnx',))[0]
 
     controllers_config_path = f'config/{robot_type_value}/controllers.yaml'
 
@@ -121,7 +121,8 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'wandb_path',
             default_value='',
-            description='W&B run path to download ONNX from (used when policy_path is empty)'
+            description='W&B run path entity/project/run_id[:vN]; its single .onnx is downloaded when '
+                        'policy_path is empty'
         ),
         controllers_opaque_func,
         control_node,
