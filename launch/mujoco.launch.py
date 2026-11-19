@@ -12,17 +12,13 @@ from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 from legged_bringup.launch_utils import (
-    get_controller_names, generate_temp_config, resolve_policy_paths, download_wandb_onnx, control_spawner
+    get_controller_names, generate_temp_config, resolve_policy_paths, control_spawner
 )
 
 
 def setup_controllers(context):
     robot_type_value = LaunchConfiguration('robot_type').perform(context)
     policy_path_value = LaunchConfiguration('policy_path').perform(context)
-    wandb_path_value = LaunchConfiguration('wandb_path').perform(context)
-
-    if not policy_path_value and wandb_path_value:
-        policy_path_value = download_wandb_onnx(wandb_path_value)
 
     controllers_config_path = 'config/' + robot_type_value + '/controllers.yaml'
 
@@ -115,11 +111,6 @@ def generate_launch_description():
             'policy_path',
             default_value='',
             description='Absolute or ~-expanded path for walking_controller.policy.path'
-        ),
-        DeclareLaunchArgument(
-            'wandb_path',
-            default_value='',
-            description='W&B run path to download ONNX from (used when policy_path is empty)'
         ),
         controllers_opaque_func,
         mujoco_simulator,
